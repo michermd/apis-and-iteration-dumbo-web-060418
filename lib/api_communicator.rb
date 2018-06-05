@@ -13,14 +13,13 @@ def get_character_movies_from_api(character)
       if does_character_exist(character) != nil
        extant_character = does_character_exist(character)
           character_films = extant_character["films"]
-              
+
           # character_films = character_films.flatten
-          puts character_films
+          parse_character_movies(character_films)
       else
         puts "We're sorry, but #{character}, is either from another 'universe', or not properly formatted."
         puts "care to try again?"
         run_program
-
       end
 end
   # iterate over the character hash to find the collection of `films` for the given
@@ -33,8 +32,13 @@ end
   #  and that method will do some nice presentation stuff: puts out a list
   #  of movies by title. play around with puts out other info about a given film.
 
-def parse_character_movies(films_hash)
+def parse_character_movies(character_films)
   # some iteration magic and puts out the movies in a nice list
+  character_films.each do |movie|
+    all_characters = RestClient.get(movie)
+    movie_hash = JSON.parse(all_characters)
+    puts movie_hash['title']
+  end
 end
 
 def show_character_movies(character)
