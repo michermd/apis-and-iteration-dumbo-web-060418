@@ -1,3 +1,3 @@
 def welcome
-  # puts out a welcome message here!
+  puts "Hello! Welcome to Mich and Paul's Star Wars API Lab!!!!"
 end

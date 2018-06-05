@@ -2,25 +2,26 @@ require 'rest-client'
 require 'json'
 require 'pry'
 
+#require_relative "../bin/run.rb"
+
 def get_character_from_user
   puts "What character's do you want to search"
   character = gets.chomp
 end
 
 def get_character_movies_from_api(character)
-  #make the web request
-  all_characters = RestClient.get('http://www.swapi.co/api/people/')
-  character_hash = JSON.parse(all_characters)
+      if does_character_exist(character) != nil
+       extant_character = does_character_exist(character)
+          character_films = extant_character["films"]
+              
+          # character_films = character_films.flatten
+          puts character_films
+      else
+        puts "We're sorry, but #{character}, is either from another 'universe', or not properly formatted."
+        puts "care to try again?"
+        run_program
 
-  character_films = []
-  character_hash['results'].each do |category|
-      if category['name'] == character
-        character_films << category['films']
       end
-  end
-
-  # character_films = character_films.flatten
-  puts character_films
 end
   # iterate over the character hash to find the collection of `films` for the given
   #   `character`
@@ -41,6 +42,13 @@ def show_character_movies(character)
   parse_character_movies(films_hash)
 end
 
+def does_character_exist(character)
+  all_characters = RestClient.get('http://www.swapi.co/api/people/')
+  character_hash = JSON.parse(all_characters)
+  character_hash['results'].find {|actual_character| actual_character["name"]==character}
+
+
+end
 
 ## BONUS
 
